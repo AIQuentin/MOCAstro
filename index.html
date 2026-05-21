@@ -1950,6 +1950,17 @@ function analyze() {
     if (e.key === 'Enter') analyze();
   });
 });
+
+function togglePatchnote(open) {
+  const overlay = document.getElementById('patchnoteOverlay');
+  if (!overlay) return;
+  if (open) overlay.classList.add('visible');
+  else overlay.classList.remove('visible');
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') togglePatchnote(false);
+});
 </script>
 
 </body>
