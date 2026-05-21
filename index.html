@@ -215,14 +215,12 @@
     max-width: 1200px;
     margin: 0 auto;
     display: flex;
-    gap: 32px;
-    align-items: center;
-    flex-wrap: wrap;
+    flex-direction: column;
+    gap: 36px;
   }
 
   .input-label-block {
-    flex: 1;
-    min-width: 300px;
+    max-width: 760px;
   }
 
   .input-label-block h2 {
@@ -246,27 +244,60 @@
     max-width: 480px;
   }
 
-  .input-controls {
-    display: flex;
-    gap: 12px;
-    align-items: stretch;
+  .input-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
   }
 
-  input[type="date"] {
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .field-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--ink);
+  }
+
+  .input-controls {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  input[type="date"],
+  select.field-input {
     padding: 18px 22px;
     background: var(--cream);
     border: var(--border);
-    font-size: 16px;
+    font-size: 15px;
     font-family: 'JetBrains Mono', monospace;
     font-weight: 600;
     color: var(--ink);
     cursor: pointer;
-    min-width: 200px;
+    width: 100%;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
   }
 
-  input[type="date"]:focus {
+  select.field-input {
+    background-image: linear-gradient(45deg, transparent 50%, var(--ink) 50%), linear-gradient(135deg, var(--ink) 50%, transparent 50%);
+    background-position: calc(100% - 20px) center, calc(100% - 14px) center;
+    background-size: 6px 6px, 6px 6px;
+    background-repeat: no-repeat;
+    padding-right: 40px;
+  }
+
+  input[type="date"]:focus,
+  select.field-input:focus {
     outline: none;
-    background: white;
+    background-color: white;
     box-shadow: 4px 4px 0 var(--ink);
     transform: translate(-2px, -2px);
   }
@@ -470,6 +501,7 @@
     font-size: clamp(20px, 2.5vw, 26px);
     line-height: 1.4;
     color: var(--ink);
+    white-space: pre-line;
   }
 
   /* Theme grid */
@@ -525,7 +557,7 @@
     line-height: 1.55;
     color: var(--ink-soft);
     margin-bottom: 20px;
-    min-height: 110px;
+    white-space: pre-line;
   }
 
   .theme-meter {
@@ -618,21 +650,25 @@
   }
 
   /* Mobile */
+  @media (max-width: 900px) {
+    .input-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
   @media (max-width: 768px) {
     .topbar { padding: 12px 16px; font-size: 10px; gap: 12px; flex-wrap: wrap; }
     .topbar-right { gap: 12px; }
     .hero { padding: 48px 20px 32px; }
     .input-block { padding: 32px 20px; }
-    .input-inner { gap: 20px; }
-    .input-controls { width: 100%; flex-direction: column; }
-    input[type="date"], .btn-go { width: 100%; min-width: 0; justify-content: center; }
+    .input-inner { gap: 24px; }
+    .input-grid { grid-template-columns: 1fr; }
+    .input-controls { width: 100%; }
+    .btn-go { width: 100%; min-width: 0; justify-content: center; }
     .verdict-band { padding: 32px 20px; }
     .sign-inner { padding: 40px 20px; }
     .sign-head { grid-template-columns: 1fr; gap: 20px; text-align: center; }
     .sign-symbol { width: 120px; height: 120px; font-size: 60px; margin: 0 auto; box-shadow: 6px 6px 0 var(--ink); }
     .sign-rank { margin: 0 auto; }
     .global-desc { padding: 24px 20px; }
-    .theme-text { min-height: auto; }
     .footer-meta { font-size: 10px; flex-direction: column; gap: 12px; }
   }
 
@@ -664,8 +700,8 @@
     <div class="floating-chips">
       <span class="chip">12 signes</span>
       <span class="chip">12 animaux</span>
-      <span class="chip">5 éléments</span>
-      <span class="chip">4 thématiques</span>
+      <span class="chip">4 BUs</span>
+      <span class="chip">5 postes</span>
       <span class="chip">0 filtre</span>
     </div>
   </div>
@@ -674,13 +710,49 @@
 <section class="input-block">
   <div class="input-inner">
     <div class="input-label-block">
-      <h2>Allez, <em>balance</em> ta date.</h2>
-      <p>Le verdict tombera sans appel. On juge en occidental, en chinois, sur quatre axes de vie.</p>
+      <h2>Allez, <em>balance</em> tout.</h2>
+      <p>Date, BU, poste, ancienneté. Le verdict tombera sans appel. Occidental et chinois fusionnés à ton profil MOCA, quatre axes de vie au menu. Aucun recours.</p>
+    </div>
+    <div class="input-grid">
+      <div class="field">
+        <label class="field-label" for="birthdate">Date de naissance</label>
+        <input type="date" id="birthdate" min="1900-01-01" max="2025-12-31">
+      </div>
+      <div class="field">
+        <label class="field-label" for="bu">BU</label>
+        <select class="field-input" id="bu">
+          <option value="">— Choisir —</option>
+          <option value="BizApps">BizApps</option>
+          <option value="Infra">Infra</option>
+          <option value="Modern Work">Modern Work</option>
+          <option value="Structure">Structure</option>
+        </select>
+      </div>
+      <div class="field">
+        <label class="field-label" for="poste">Poste</label>
+        <select class="field-input" id="poste">
+          <option value="">— Choisir —</option>
+          <option value="Directeur">Directeur</option>
+          <option value="Manager">Manager</option>
+          <option value="Consultant">Consultant</option>
+          <option value="Chef de projet">Chef de projet</option>
+          <option value="Expert">Expert</option>
+        </select>
+      </div>
+      <div class="field">
+        <label class="field-label" for="anciennete">Ancienneté</label>
+        <select class="field-input" id="anciennete">
+          <option value="">— Choisir —</option>
+          <option value="lt2">Moins de 2 ans</option>
+          <option value="2-5">Entre 2 et 5 ans</option>
+          <option value="5-8">Entre 5 et 8 ans</option>
+          <option value="gt8">Plus de 8 ans</option>
+        </select>
+      </div>
     </div>
     <div class="input-controls">
-      <input type="date" id="birthdate" min="1900-01-01" max="2025-12-31">
       <button class="btn-go" onclick="analyze()">
-        <span>Révéler</span>
+        <span>Révéler le verdict</span>
         <span class="btn-arrow">→</span>
       </button>
     </div>
@@ -1049,31 +1121,265 @@ function getVerdict(r1, r2) {
   return { class: "ok", text: "Trop gentil pour être vrai. Probablement une couverture. Mais on vous accorde le bénéfice du doute. Pour l'instant." };
 }
 
+// ===== PROFIL MOCA — FRAGMENTS =====
+// Chaque dimension (BU / poste / ancienneté) fournit DEUX jeux de fragments :
+//   - w.{global,pro,amour,sante,finance} : appondu au signe occidental
+//   - c.{global,pro,amour,sante,finance} : appondu au signe chinois
+// Aucun fragment ne se répète entre w et c → l'occidental et le chinois ne disent jamais la même chose.
+const businessUnits = {
+  "BizApps": {
+    w: {
+      global: "Sauf que là, c'est marinade BizApps : tout finit en flow Power Automate qui plante au run 12.",
+      pro: "Tu jures par Dataverse, le client veut juste son Excel. Tu finis par lui livrer une app no-code qui imite Excel.",
+      amour: "Ton/ta partenaire t'a entendu parler de « business rules » au lit. Le couple est en burn-in.",
+      sante: "Trois écrans, deux Surface, une PowerApp ouverte H24. Tes yeux saignent en JSON.",
+      finance: "Tu vis dans le plan E5, le client a refusé le Premium. Tes licences valent plus que ton net mensuel."
+    },
+    c: {
+      global: "Version BizApps : tu connais 14 connecteurs Dataverse, aucun client n'en utilise plus de deux.",
+      pro: "Tu te bats avec un trigger Power Automate qui mange les apostrophes depuis huit mois.",
+      amour: "Tes flirts te demandent « tu fais quoi dans la vie » → tu réponds « low-code » → silence radio.",
+      sante: "Tendinite Logic Apps du poignet droit. Ton kiné connaît ton tenant ID par cœur.",
+      finance: "Tu factures du Dataverse à 750€/j, MS facture la licence à 90€/u, le client râle pour 12€."
+    }
+  },
+  "Infra": {
+    w: {
+      global: "Tout ça avec un sweat noir, un terminal ouvert depuis 2019, et PagerDuty qui te traque jusqu'aux toilettes.",
+      pro: "Réveillé à 3h du matin parce qu'un certif a expiré. Personne ne te remercie. Tout le monde t'engueule au matin.",
+      amour: "Première date : tu parles Kubernetes pendant 40 minutes. Deuxième date : il n'y en a pas.",
+      sante: "Astreinte = sommeil en pointillés. Tu bois ton café froid à 4h du mat dans le noir. Très romantique.",
+      finance: "Salaire correct mais tu le claques en homelab : NAS Synology, switch managé, rack 19 pouces dans le salon."
+    },
+    c: {
+      global: "Version Infra : tu jures que « ça marche chez toi » en sachant pertinemment que la prod, c'est pas chez toi.",
+      pro: "Ton runbook est dans un Confluence dont personne n'a les droits. Personne ne sait restart le service à part toi.",
+      amour: "Ton/ta partenaire a appris à ne pas te déranger quand tu fronces les sourcils devant un graph Grafana.",
+      sante: "Sciatique précoce. Tu mérites la Herman Miller, on t'a donné une Ikea qui couine.",
+      finance: "Tu rêves de partir en freelance à 900€/j, tu restes en CDI « pour la sécurité ». Spoiler : y en a pas."
+    }
+  },
+  "Modern Work": {
+    w: {
+      global: "Repackagé en parcours d'adoption Modern Work, avec un webinaire « les 7 piliers du collaboratif » que 4 personnes regarderont en x2.",
+      pro: "Tu pitches Copilot à des boîtes qui n'ont pas migré OneDrive. Tes « champions networks » meurent au bout de 3 mois.",
+      amour: "Tu proposes un « atelier d'adoption » à ton couple. Ton/ta partenaire n'a pas renouvelé la licence.",
+      sante: "Trois cafés, deux ateliers, un Teams Live à 47 personnes. Ta voix tient grâce au miel et à la peur.",
+      finance: "Tu factures du change management à 1100€/j, t'apportes des post-it Pilot V5 et une bonne énergie."
+    },
+    c: {
+      global: "Version Modern Work : tu fais des « personas » de l'utilisateur final, t'en as jamais croisé un en vrai.",
+      pro: "Tu mesures l'adoption avec Viva Insights, le DG te demande « ça veut dire quoi, 0,3 ? ».",
+      amour: "Tu parles « one-on-one » en couple. Ton/ta partenaire t'envoie un mail récap signé Cordialement.",
+      sante: "Visio-fatigue niveau diplôme. Tu rêves de notifs Teams le dimanche soir. À l'aide.",
+      finance: "Tu factures un atelier « icebreaker » 4000€, ton client le revend 12000€. Tu y repenseras à l'inflation."
+    }
+  },
+  "Structure": {
+    w: {
+      global: "Le tout encadré par un process Structure validé en 4 niveaux, archivé dans un SharePoint que plus personne ne sait ouvrir.",
+      pro: "Responsable de tout, valorisé pour rien. KPIs demandés un vendredi à 18h pour un comex lundi 8h.",
+      amour: "Tu fais un Gantt de la prochaine soirée en amoureux. Le sponsor n'a pas reconduit en 2026.",
+      sante: "Migraines de fond depuis la dernière réorg. Tu connais ton ostéo mieux que ton DRH.",
+      finance: "T'as l'idée du PERCO mais pas le budget. Tu calcules ta retraite sur un coin de tableur en réunion."
+    },
+    c: {
+      global: "Version Structure : tu sais où sont enterrés les cadavres, t'as pas le droit d'en parler avant la prochaine NDA.",
+      pro: "Tu envoies un mail de relance mentionnant 4 personnes en copie + DG en CCi. Personne ne répond.",
+      amour: "Tu organises les vacances comme un appel d'offres : 3 propositions, comparatif, validation Comex.",
+      sante: "Ton corps somatise les comptes-rendus de réorg. Mâchoire bloquée, cervicales en compote.",
+      finance: "Tickets restau optimisés à l'euro près. Tu connais le taux URSSAF par cœur. Tu n'as pas d'amis."
+    }
+  }
+};
+
+const positions = {
+  "Directeur": {
+    w: {
+      global: "Version Directeur : tu pratiques tout ça en LinkedIn-posting bi-hebdomadaire, hot take de 200 mots et un 🚀 en fin.",
+      pro: "Tes décisions stratégiques sont prises entre deux RER au déjeuner. La trajectoire 2030 a été pondue dans un Uber.",
+      amour: "Tu rentres à 22h, tu repars à 7h. Tu vois ton/ta conjoint·e le dimanche, en mode brunch perfunctory.",
+      sante: "Suivi cardiaque annuel, bilan biologique semestriel, Apple Watch au max. Ton corps est un asset.",
+      finance: "LBO de ta résidence secondaire, voiture LOA pour optimiser, comptable perso qui ne dort plus. PEA explosé en 2019."
+    },
+    c: {
+      global: "En mode Directeur : ton mail signé « Bien à toi, Prénom Nom — DG MOCA — Envoyé depuis mon iPhone » fait trembler trois services.",
+      pro: "Tu valides en visio depuis l'aéroport, micro coupé. « OK pour moi, on y va. » Tu sais pas de quoi on parle.",
+      amour: "Tu glisses « j'ai un comex » comme excuse depuis 8 ans. Ton/ta conjoint·e a noté la fréquence.",
+      sante: "Massage tous les jeudis, yoga le lundi, coach mental. Mais tu fumes en cachette derrière le bâtiment.",
+      finance: "Stock-options qui vestent en 2028. Tu calcules ta sortie depuis 2024. Banque privée déjà briefée."
+    }
+  },
+  "Manager": {
+    w: {
+      global: "Version Manager : tu transformes tout ça en OKR trimestriels, suivi Notion que ton équipe n'ouvre jamais.",
+      pro: "Coincé entre la direction qui rêve et l'équipe qui rame. 1to1 = écoute de plaintes. Comité = défense de budget.",
+      amour: "Tu fais un « point hebdo » avec ton/ta partenaire. C'est noté dans Outlook. Personne n'est dupe.",
+      sante: "Burn-out programmé Q3, déjà dans ton agenda. Yoga le mardi, Spritz le jeudi. Équilibre.",
+      finance: "Prime variable conditionnée à des objectifs que la direction change en novembre. PEE blindé, PERCO à l'ouest."
+    },
+    c: {
+      global: "Version Manager : tu cites « radical candor » au CODIR. Personne n'a lu, tout le monde acquiesce.",
+      pro: "Tu deviens psy non rémunéré de ton équipe. Tu rêves de redevenir IC, tu n'oseras jamais le dire à voix haute.",
+      amour: "Tu utilises « feedback constructif » dans ta relation. Ça finit en thérapie de couple à 95€ la séance.",
+      sante: "Mal de tête tensionnel, dents serrées la nuit. Gouttière commandée. Jamais portée par orgueil.",
+      finance: "Tu calcules ton « équivalent jour » pour comprendre si t'es plus payé qu'un consultant senior. La réponse fait mal."
+    }
+  },
+  "Consultant": {
+    w: {
+      global: "Version Consultant : tu repackages tout ça en PowerPoint avec 3 niveaux de bullet points et une matrice 2x2 qui ne veut rien dire.",
+      pro: "Tu factures à la journée des conseils que ton client appliquera à moitié. CV à rallonge, badge perdu trois fois.",
+      amour: "Tu rencontres ton/ta date au bar du Lutetia entre deux missions. Pitch : « je voyage beaucoup, tu vois »...",
+      sante: "Hôtel Mercure, salle de sport au sous-sol jamais visitée. Petit-déj continental = ta seule constance.",
+      finance: "Note de frais à 47€ pour un sandwich Pret à Londres. TJM négocié à la virgule, onglet portage salarial en privé."
+    },
+    c: {
+      global: "Version Consultant : tu sors « ça dépend » à chaque question. Tu factures la même journée 3 fois en split-billing.",
+      pro: "Tu débarques en mission, tu redécouvres SharePoint, tu factures la phase d'« acculturation » deux semaines.",
+      amour: "Tu rentres le vendredi soir, tu repars le lundi 6h30. Ton couple est officiellement en multi-tenant.",
+      sante: "Lombalgie OUIGO, déshydratation TER. Ton ostéo est mieux référencé que ton médecin traitant.",
+      finance: "Tu rêves de monter ta SASU. Tu calcules : 35% URSSAF, 25% IS, 30% IR. Tu restes salarié."
+    }
+  },
+  "Chef de projet": {
+    w: {
+      global: "Version Chef de projet : tu mets ça dans un Gantt à 240 lignes que ton sponsor n'ouvre que pour demander « ça va tenir ? ».",
+      pro: "Tu cours après les jalons, ressources, validations. CR que personne ne lit, planning que personne ne respecte.",
+      amour: "Tu fais un RACI de ta vie de couple. Conclusion : tu es R et A sur absolument tout.",
+      sante: "Sueurs froides à chaque comité de pilotage. Tu repères les sorties de secours dans chaque salle.",
+      finance: "RAF projet à 1€ près, compte perso pas vérifié depuis 3 semaines. Forfait jour, RTT non posées, prime annulée."
+    },
+    c: {
+      global: "Version Chef de projet : tu peuples un risk registry de 87 lignes. Tu en partages 3 au sponsor. Les 84 autres se réalisent.",
+      pro: "Tu fais 6 réunions de cadrage pour un sujet qui aurait pris un mail. Ton outil principal : Doodle.",
+      amour: "Tu envoies un Doodle pour fixer le créneau du dîner anniversaire. Ton/ta partenaire ne répond plus aux Doodle.",
+      sante: "Tension cervicale après chaque steerco. Tu connais le nom de tes vertèbres par cœur.",
+      finance: "Forfait jours = pas d'heures sup. Tu fais 55h facturées 35. Tu fais une grimace en relisant ton bulletin."
+    }
+  },
+  "Expert": {
+    w: {
+      global: "Version Expert : tu refais tout ça en assembleur si possible, en condescendant sur ceux qui utilisent un framework « pour assistés ».",
+      pro: "Refuses 80% des réunions, débarques en mode Gandalf. Doc Confluence de 400 pages que personne ne lira jamais.",
+      amour: "Première date : tu expliques la complexité algorithmique du flirt. Pas de deuxième date.",
+      sante: "Syndrome du tunnel carpien. Tu refuses la kiné « j'ai pas le temps ». Tu codes en attelle.",
+      finance: "Sous-payé par rapport à ta valeur (dixit toi). Refus de toute promo qui impliquerait du management."
+    },
+    c: {
+      global: "Version Expert : tu cites une RFC en commentaire de PR junior. « cf RFC 7235 §3.1, va lire ».",
+      pro: "Tu écris des post-mortems de 30 pages en markdown que personne ne lit, mais que tu mets sur ton GitHub perso.",
+      amour: "Tu compares tes ex sur un tableau radar à 8 axes. Pas de gagnante. Tu vis seul, ça t'arrange.",
+      sante: "Lunettes à -8 à 32 ans. Posture VS Code permanente. Vertèbres cervicales en sushi.",
+      finance: "T'as raté Bitcoin parce que « techniquement le whitepaper était faible ». Tu mines du Monero pour le principe."
+    }
+  }
+};
+
+const seniority = {
+  "lt2": {
+    w: {
+      global: "Version newbie : tu compenses chaque doute en ouvrant ChatGPT en parallèle, et tu dis « brainrot » au lieu de « ça me saoule ».",
+      pro: "Tu prends des notes en réunion comme à la fac. Tu dis bonjour à 47 personnes par jour. Tu crois que les process ont un sens.",
+      amour: "Hinge ouvert pendant les daily, ghosting bidirectionnel, situationship qui dure 4 semaines. Tu te demandes si t'es aro-ace ou juste épuisé par TikTok.",
+      sante: "7h de scroll quotidien, dopamine en miettes, anxiété généralisée. Diagnostic TDAH posé toi-même grâce à une vidéo de 47 secondes.",
+      finance: "PEL ouvert par les parents à ta naissance, oublié depuis. Tu paies tout en Lydia, tu retrouves jamais qui a payé quoi."
+    },
+    c: {
+      global: "Version - de 2 ans : tu balances « 67 » dans le couloir en regardant un collègue de 42 ans. Il comprend rien. Tu trouves ça hilarant.",
+      pro: "Tu fais ton premier commit en vibe-coding. Ton lead t'engueule. Tu repenses à ta vie sur le trajet retour.",
+      amour: "Tu rencontres quelqu'un sur Hinge, vous parlez 3 semaines, vous vous voyez une fois, ça meurt. Tu trouves ça normal.",
+      sante: "Tu vapotes ta puff Lost Mary à la pause. Tu prétends que c'est mieux que la clope. Ton poumon a pas voté.",
+      finance: "Tu mets ton premier salaire dans une crypto recommandée par un YouTubeur. Tu perds 60%. Tu en parles à personne."
+    }
+  },
+  "2-5": {
+    w: {
+      global: "Version 2-5 ans : tu portes ça avec un sourire de façade et un Welcome to the Jungle ouvert en onglet privé toutes les 48h.",
+      pro: "Tu commences à juger les choix de la direction au café. Tu hésites à partir. Spoiler : tu vas rester 3 ans de plus.",
+      amour: "Pacsé avec quelqu'un rencontré à un afterwork, on parle déjà mariage et appart en banlieue. Le coup de mou de la trentaine pointe.",
+      sante: "Abonnement Basic Fit jamais utilisé. Mal de dos précoce. Café : passé de 2 à 5 par jour. Tu découvres la « lombalgie ».",
+      finance: "Premier crédit immo en cours d'instruction. Apport composé à 80% des parents. Tu fais semblant que c'est ton mérite."
+    },
+    c: {
+      global: "Version 2-5 ans : tu rejoins une équipe « projet transverse » que personne ne comprend. Tu n'oses pas demander en quoi ça consiste.",
+      pro: "Tu refuses ta première promo « par fidélité ». 6 mois plus tard, tu démissionnes en larmes intérieures.",
+      amour: "Vous parlez « bébé » au dîner avec ton/ta partenaire. Vous n'osez pas dire que ni l'un ni l'autre n'est sûr.",
+      sante: "Premier vrai mal de dents nocturne. Le dentiste dit « bruxisme ». Gouttière de nuit. Tu la perds en deux mois.",
+      finance: "Tu découvres que ton CSE rembourse des massages. Tu prends 4 rendez-vous le même mois. Plus jamais après."
+    }
+  },
+  "5-8": {
+    w: {
+      global: "Version vétéran lucide : tu réponds à tout par « on a déjà essayé, ça a pété en 2022, regardez le CR du COMEX de mars » avec un calme glaçant.",
+      pro: "Mémoire vive de la boîte. On vient te demander « comment on faisait avant ? ». Tu as vu deux réorgs et 14 « transformations ».",
+      amour: "Marié, 2 gosses, crédit immo sur 25 ans. Le sexe c'est un planning Outlook. Tu fais semblant d'aimer le padel pour socialiser.",
+      sante: "Crise de la quarantaine en approche. Abonnement crossfit pour compenser. Alcool du vendredi qui s'étend au jeudi.",
+      finance: "Tu commences à faire des simulations retraite sur info-retraite.fr. Tu fais une grimace. Tu fermes l'onglet."
+    },
+    c: {
+      global: "Version 5-8 ans : tu cites le projet Phénix de 2021 à chaque réunion. Personne ne le connaît, mais on hoche la tête poliment.",
+      pro: "Tu refuses une mobilité géographique « pour les enfants ». Tu perds la promo. Tu fais semblant que c'était ton choix.",
+      amour: "Le quatrième enfant n'est plus à l'ordre du jour. Vacances en gîte, plus jamais en hôtel club. Tu vieillis bien.",
+      sante: "Premier check-up cardio. Le médecin dit « ça va, mais bougez ». Tu vas marcher deux fois, puis tu reprends Netflix.",
+      finance: "Tu refais ta cuisine. 28k€. Tu te dis que t'as fait une affaire. Le voisin l'a faite à 19k€."
+    }
+  },
+  "gt8": {
+    w: {
+      global: "Version monument historique : tu sors « avant on faisait sans Teams et c'était mieux », tout en sachant que d'ici 2027 Copilot fera ton job.",
+      pro: "T'as encore un compte Lotus Notes ouvert quelque part. T'as vu passer 4 DG, 3 réorgs et 12 stratégies « définitives ».",
+      amour: "Couple stabilisé depuis l'époque où Facebook servait à voir les photos de potes. Le mot « Tinder » te terrifie.",
+      sante: "Kiné toutes les 3 semaines, cervicales en miettes, lunettes double foyer commandées. Tu parles « cardio » à la machine à café.",
+      finance: "PEL à 4,5% bloqué depuis 2003. Tu y touches pas, c'est sacré. Ta banquière a tenté 12 fois, tu l'as ghostée 12 fois."
+    },
+    c: {
+      global: "Version + de 8 ans : tu parles encore de l'« ancien CRM ». Plus personne ne sait ce que c'était. Toi non plus en vrai.",
+      pro: "On te confie les nouveaux pour leur « transmission ». Tu leur racontes des histoires. Ils écoutent par politesse.",
+      amour: "Vous avez votre place de cinéma le mardi soir, tarif réduit. Vous parlez du film 6 minutes en rentrant. C'est ça l'amour.",
+      sante: "Première colo prescrite. Tu remets de 2 ans en 2 ans. Ton médecin commence à insister fermement.",
+      finance: "Ton assurance vie a 22 ans. Le notaire t'a expliqué la clause bénéficiaire trois fois. Tu vas mourir avant de comprendre."
+    }
+  }
+};
+
 // ===== ANALYZE =====
 function analyze() {
   const input = document.getElementById('birthdate').value;
+  const buVal = document.getElementById('bu').value;
+  const posteVal = document.getElementById('poste').value;
+  const ancVal = document.getElementById('anciennete').value;
+
   if (!input) { alert("Renseigne ta date de naissance pour subir le jugement."); return; }
+  if (!buVal || !posteVal || !ancVal) { alert("Remplis tous les champs MOCA. On juge avec un dossier complet."); return; }
+
   const [year, month, day] = input.split('-').map(Number);
 
   const w = getWestern(month, day);
   const ch = getChinese(year, month, day);
+  const bu = businessUnits[buVal];
+  const poste = positions[posteVal];
+  const anc = seniority[ancVal];
+
+  // Join paragraphs with double line breaks (CSS white-space: pre-line)
+  const para = (...parts) => parts.filter(Boolean).map(p => p.trim()).join('\n\n');
 
   // Western
   document.getElementById('westSymbol').textContent = w.symbol;
   document.getElementById('westName').textContent = w.name;
   document.getElementById('westMeta').textContent = `Du ${String(w.from[1]).padStart(2,'0')}/${String(w.from[0]).padStart(2,'0')} au ${String(w.to[1]).padStart(2,'0')}/${String(w.to[0]).padStart(2,'0')}`;
-  document.getElementById('westGlobal').textContent = w.global;
+  document.getElementById('westGlobal').textContent = para(w.global, bu.w.global, poste.w.global, anc.w.global);
   ['pro','amour','sante','finance'].forEach(k => {
-    document.getElementById(`west-${k}`).textContent = w[k].txt;
+    document.getElementById(`west-${k}`).textContent = para(w[k].txt, bu.w[k], poste.w[k], anc.w[k]);
   });
 
   // Chinese
   document.getElementById('chSymbol').textContent = `${ch.animal.symbol}${ch.element.emoji}`;
   document.getElementById('chName').textContent = `${ch.animal.name} de ${ch.element.name}`;
   document.getElementById('chMeta').textContent = `Année lunaire ${ch.year}`;
-  document.getElementById('chGlobal').textContent = ch.animal.global + ch.element.twist;
+  document.getElementById('chGlobal').textContent = para(ch.animal.global, ch.element.twist, bu.c.global, poste.c.global, anc.c.global);
   ['pro','amour','sante','finance'].forEach(k => {
-    document.getElementById(`ch-${k}`).textContent = ch.animal[k].txt;
+    document.getElementById(`ch-${k}`).textContent = para(ch.animal[k].txt, bu.c[k], poste.c[k], anc.c[k]);
   });
 
   // Verdict
@@ -1087,8 +1393,10 @@ function analyze() {
   setTimeout(() => results.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
 }
 
-document.getElementById('birthdate').addEventListener('keydown', e => {
-  if (e.key === 'Enter') analyze();
+['birthdate','bu','poste','anciennete'].forEach(id => {
+  document.getElementById(id).addEventListener('keydown', e => {
+    if (e.key === 'Enter') analyze();
+  });
 });
 </script>
 
